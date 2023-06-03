@@ -1,10 +1,11 @@
-function App() {
+import AllRoutes from "./AllRoutes";
 
+function App() {
   return (
-    <div className="w-screen h-screen bg-red-300">
-      
+    <div className="w-screen h-screen">
+      <AllRoutes />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
