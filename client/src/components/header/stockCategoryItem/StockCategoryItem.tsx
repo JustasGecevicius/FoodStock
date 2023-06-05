@@ -36,7 +36,7 @@ export default function StockCategoryItem({
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center w-1/4 h-full">
+    <div className="flex flex-col items-center justify-center w-1/4 h-full gap-y-1">
       <img src={imageSource} alt={category} className="aspect-square h-2/3" />
       <p className="text-teal-900 h-1/3">{currentStock}G</p>
     </div>
