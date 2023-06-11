@@ -1,16 +1,17 @@
-import { db } from "../models/index.mjs";
+import { db } from '../models/index.mjs';
 
 const ROLES = db.ROLES;
 const User = db.user;
 
 const checkDuplicateUsernameOrEmail = async (req, res, next) => {
+  console.log('CHECKDUP');
   // Username
   const foundUser = await User.findOne({
     username: req.body.username,
   }).exec();
 
   if (foundUser) {
-    res.status(400).send({ message: "Failed! Username is already in use!" });
+    res.status(400).send({ message: 'Failed! Username is already in use!' });
     return;
   }
 
@@ -20,13 +21,14 @@ const checkDuplicateUsernameOrEmail = async (req, res, next) => {
   }).exec();
 
   if (foundEmail) {
-    res.status(400).send({ message: "Failed! Email is already in use!" });
+    res.status(400).send({ message: 'Failed! Email is already in use!' });
     return;
   }
   next();
 };
 
 const checkRolesExisted = (req, res, next) => {
+  console.log('CHECKDUP');
   if (req.body.roles) {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i])) {

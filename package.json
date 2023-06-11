@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/JustasGecevicius/FoodStock#readme",
   "dependencies": {
-    "concurrently": "^8.0.1"
+    "concurrently": "^8.0.1",
+    "cookie-parser": "^1.4.6"
   }
 }
