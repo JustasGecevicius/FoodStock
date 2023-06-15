@@ -6,6 +6,7 @@ import { db } from './models/index.mjs';
 import authRoutes from './routes/auth.routes.mjs';
 import userRoutes from './routes/user.routes.mjs';
 import recipeRoutes from './routes/recipe.routes.mjs';
+import ingredientRoutes from './routes/ingredient.routes.mjs';
 import https from 'https';
 import fs from 'fs';
 import cookieParser from 'cookie-parser';
@@ -38,6 +39,7 @@ app.get('/', (req, res) => {
 authRoutes(app);
 userRoutes(app);
 recipeRoutes(app);
+ingredientRoutes(app);
 
 (async () => {
   try {
