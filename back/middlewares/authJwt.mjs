@@ -1,20 +1,20 @@
-import jwt from "jsonwebtoken";
-import { db } from "../models/index.mjs";
-import { config } from "../config/auth.config.mjs";
-
+import jwt from 'jsonwebtoken';
+import { db } from '../models/index.mjs';
+import { config } from '../config/auth.config.mjs';
+import cookieParser from 'cookie-parser';
 const User = db.user;
 const Role = db.role;
 
 const verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"];
+  let token = req.cookies.token;
 
   if (!token) {
-    return res.status(403).send({ message: "No token provided!" });
+    return res.status(403).send({ message: 'No token provided!' });
   }
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
-      return res.status(401).send({ message: "Unauthorized!" });
+      return res.status(401).send({ message: 'Unauthorized!' });
     }
     req.userId = decoded.id;
     next();
@@ -29,13 +29,13 @@ const isAdmin = async (req, res, next) => {
     });
 
     for (let i = 0; i < roles.length; i++) {
-      if (roles[i].name === "admin") {
+      if (roles[i].name === 'admin') {
         next();
         return;
       }
     }
 
-    res.status(403).send({ message: "Require Admin Role!" });
+    res.status(403).send({ message: 'Require Admin Role!' });
     return;
   }
 };
@@ -48,13 +48,13 @@ const isModerator = async (req, res, next) => {
     });
 
     for (let i = 0; i < roles.length; i++) {
-      if (roles[i].name === "moderator") {
+      if (roles[i].name === 'moderator') {
         next();
         return;
       }
     }
 
-    res.status(403).send({ message: "Requires Moderator Role!" });
+    res.status(403).send({ message: 'Requires Moderator Role!' });
     return;
   }
 };

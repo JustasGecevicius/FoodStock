@@ -32,7 +32,7 @@ export const signup = async (req, res) => {
       console.log('USER ROLE');
       const userRole = await Role.findOne({ name: 'user' });
       newUser.roles = [userRole._id];
-      await user.save();
+      await newUser.save();
       res.send({ message: 'User was registered successfully!' });
     }
   } catch (error) {
@@ -42,7 +42,7 @@ export const signup = async (req, res) => {
 };
 
 export const signin = async (req, res) => {
-  console.log(req.cookies);
+  console.log('req.cookies');
   const userFound = User.findOne({
     username: req.body.usernameOrEmail,
   })
@@ -51,7 +51,9 @@ export const signin = async (req, res) => {
 
   const emailFound = User.findOne({
     email: req.body.usernameOrEmail,
-  });
+  })
+    .populate('roles', '-__v')
+    .exec();
 
   const user = await Promise.all([userFound, emailFound]);
   const validUser =
@@ -68,17 +70,13 @@ export const signin = async (req, res) => {
       error: 'Invalid Password!',
     });
   }
-  const token = jwt.sign({ id: validUser?.id }, config.secret, {
-    expiresIn: 86400, // 24 hours
-  });
+  const token = jwt.sign({ id: validUser.id }, config.secret);
 
   const authorities = [];
 
   for (let i = 0; i < validUser.roles.length; i++) {
-    (async () => {
-      const foundRole = await Role.findOne({ _id: validUser.roles[i]._id });
-      authorities.push('ROLE_' + foundRole.name.toUpperCase());
-    })();
+    console.log(validUser.roles[i]);
+    authorities.push('ROLE_' + validUser.roles[i].name.toUpperCase());
   }
 
   res.cookie('token', token, { httpOnly: true, sameSite: 'none', secure: true });

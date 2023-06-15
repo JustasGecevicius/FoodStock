@@ -5,8 +5,10 @@ import cors from 'cors';
 import { db } from './models/index.mjs';
 import authRoutes from './routes/auth.routes.mjs';
 import userRoutes from './routes/user.routes.mjs';
+import recipeRoutes from './routes/recipe.routes.mjs';
 import https from 'https';
 import fs from 'fs';
+import cookieParser from 'cookie-parser';
 
 const credentials = {
   key: fs.readFileSync('c:/inetpub/wwwroot/192.168.1.13-key.pem'),
@@ -22,7 +24,7 @@ const Role = db.role;
 const corsOptions = {
   origin: 'http://192.168.1.13:5173',
 };
-
+app.use(cookieParser());
 app.use(cors({ credentials: true, origin: true }));
 console.log('server');
 app.use(express.json());
@@ -35,6 +37,7 @@ app.get('/', (req, res) => {
 
 authRoutes(app);
 userRoutes(app);
+recipeRoutes(app);
 
 (async () => {
   try {
