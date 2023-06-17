@@ -1,9 +1,9 @@
-import { SyntheticEventData } from 'react-dom/test-utils';
+import { useAppDispatch } from './../store/hooks';
 import baseAxios from '../api/baseAxios';
-import { SyntheticEvent } from 'react';
 import { NavigateFunction } from 'react-router-dom';
-import SignIn from '../pages/SignIn';
-
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { Dispatch } from 'react';
+import { UserState, change } from '../pages/signIn/slice';
 interface handleSignUpTypes {
   username: string;
   password: string;
@@ -14,6 +14,15 @@ interface handleSignInType {
   usernameOrEmail: string;
   password: string;
 }
+
+type dispatchType = ThunkDispatch<
+  {
+    user: UserState;
+  },
+  undefined,
+  AnyAction
+> &
+  Dispatch<AnyAction>;
 
 export const handleSignUp = (
   { username, password, email }: handleSignUpTypes,
@@ -26,7 +35,6 @@ export const handleSignUp = (
       .post('api/auth/signup', { username, password, email })
       .then(({ data }) => {
         if (!data.error) {
-          console.log(data.message);
           navigate('/main-page', { replace: true });
           return;
         }
@@ -38,7 +46,8 @@ export const handleSignUp = (
 
 export const handleSignIn = (
   { usernameOrEmail, password }: handleSignInType,
-  navigate: NavigateFunction
+  navigate: NavigateFunction,
+  dispatch: dispatchType
 ) => {
   if (usernameOrEmail && password) {
     console.log('SignIn');
@@ -51,7 +60,7 @@ export const handleSignIn = (
       .then((res) => {
         console.log(res);
         if (!res.data.error) {
-          console.log(res.data.message);
+          dispatch(change({ id: res.data.id }));
           navigate('/main-page');
           return;
         }
