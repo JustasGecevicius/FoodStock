@@ -1,4 +1,7 @@
-import { createIngredient } from '../controllers/ingredient.controlles.mjs';
+import {
+  createIngredient,
+  getAllIngredients,
+} from '../controllers/ingredient.controlles.mjs';
 import { authJwt } from '../middlewares/authJwt.mjs';
 
 export default (app) => {
@@ -12,4 +15,5 @@ export default (app) => {
   });
 
   app.post('/api/ingredient/create', [authJwt.verifyToken], createIngredient);
+  app.get('/api/ingredient/all', [authJwt.verifyToken], getAllIngredients);
 };

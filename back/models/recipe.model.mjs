@@ -14,7 +14,7 @@ export const Recipe = mongoose.model(
         ref: 'Ingredient',
       },
     ],
-    steps: Object,
-    comments: Array,
+    steps: [Object],
+    comments: String,
   })
 );

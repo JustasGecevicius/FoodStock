@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .backgroundImage {
-  background-image: url("/src/assets/background.jpg");
+  background-image: url('/src/assets/background.jpg');
 }
 
 :root {
@@ -35,8 +35,8 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  min-width: 100dvw;
+  min-height: 100dvh;
 }
 
 h1 {

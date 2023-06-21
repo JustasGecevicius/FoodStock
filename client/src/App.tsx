@@ -1,8 +1,8 @@
-import AllRoutes from "./AllRoutes";
+import AllRoutes from './AllRoutes';
 
 function App() {
   return (
-    <div className="w-screen h-screen">
+    <div className='w-screen h-screen overflow-y-hidden'>
       <AllRoutes />
     </div>
   );

@@ -2,7 +2,6 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { db } from './models/index.mjs';
 import authRoutes from './routes/auth.routes.mjs';
 import userRoutes from './routes/user.routes.mjs';
 import recipeRoutes from './routes/recipe.routes.mjs';
@@ -10,7 +9,15 @@ import ingredientRoutes from './routes/ingredient.routes.mjs';
 import https from 'https';
 import fs from 'fs';
 import cookieParser from 'cookie-parser';
+import fileUpload from 'express-fileupload';
+import admin from 'firebase-admin';
+// import credentialsF from './credentials.json';
+import { db } from './models/index.mjs';
+// admin.initializeApp({
+//   credential: admin.credential.cert(credentialsF),
+// });
 
+// export const db = admin.firestore();
 const credentials = {
   key: fs.readFileSync('c:/inetpub/wwwroot/192.168.1.13-key.pem'),
   cert: fs.readFileSync('c:/inetpub/wwwroot/192.168.1.13.pem'),
@@ -25,12 +32,11 @@ const Role = db.role;
 const corsOptions = {
   origin: 'http://192.168.1.13:5173',
 };
-app.use(cookieParser());
 app.use(cors({ credentials: true, origin: true }));
-console.log('server');
-app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(fileUpload());
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.json({ message: 'Hello World!' });

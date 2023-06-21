@@ -6,6 +6,12 @@ export default {
       maxHeight: {
         '2/6': '33.33%',
       },
+      height: {
+        screen: '100dvh',
+      },
+      width: {
+        screen: '100dvw',
+      },
     },
   },
   plugins: [],

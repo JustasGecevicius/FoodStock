@@ -1,27 +1,40 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Navigation from '../../components/navigation/Navigation';
 import MacroInput from '../../components/ingredients/MacroInput';
 import { useCreateIngredientMutation } from './api';
 
+export interface MacrosType {
+  protein: null | number;
+  carbs: null | number;
+  fat: null | number;
+}
+
 export default function CreateIngredient() {
   const [name, setName] = useState('');
-  const [calories, setCalories] = useState(0);
-  const [macros, setMacros] = useState({
-    protein: 0,
-    carbs: 0,
-    fat: 0,
+  const [calories, setCalories] = useState<number | null>(null);
+  const [macros, setMacros] = useState<MacrosType>({
+    protein: null,
+    carbs: null,
+    fat: null,
   });
   const [isMacrosOpen, setIsMacrosOpen] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
+
   const [createIngredient, { isLoading }] = useCreateIngredientMutation();
   console.log(isLoading);
   const handleSave = async () => {
-    console.log('handleSave');
-    await createIngredient({
-      name,
-      calories,
-      macros,
-    });
+    const formData = new FormData();
+    console.log(name, calories, macros, image);
+    formData.append('name', name);
+    formData.append('calories', JSON.stringify(calories));
+    formData.append('macros', JSON.stringify(macros));
+    image && formData.append('image', image);
+    await createIngredient(formData);
   };
+
+  useEffect(() => {
+    console.log(image);
+  }, [image]);
 
   return (
     <div className='flex flex-col w-screen h-screen bg-no-repeat bg-cover backgroundImage gap-y-5'>
@@ -43,6 +56,17 @@ export default function CreateIngredient() {
             />
           </label>
           <label
+            htmlFor='file-input'
+            className='flex flex-col items-center text-center text-teal-900'>
+            Add Picture
+            <input
+              type='file'
+              className='hidden px-3 py-2 text-white bg-teal-700 rounded-md w-52'
+              onChange={(e) => setImage(e.target.files && e.target.files[0])}
+              id='file-input'
+            />
+          </label>
+          <label
             htmlFor=''
             className='flex flex-col items-center text-center text-teal-900'>
             Calories
@@ -51,7 +75,7 @@ export default function CreateIngredient() {
               className='px-3 py-2 text-white bg-teal-700 rounded-md w-52'
               placeholder='Calories'
               onChange={(e) => setCalories(+e.target.value)}
-              value={calories}
+              value={calories ? calories : undefined}
             />
           </label>
           {!isMacrosOpen && (

@@ -7,6 +7,7 @@ import RecipesAndIngredients from './pages/recipesAndIngredients/RecipesAndIngre
 import Settings from './pages/settings/Settings';
 import Ingredients from './pages/ingredients/Ingredients';
 import CreateIngredient from './pages/ingredients/createIngredient';
+import CreateRecipe from './pages/recipes/createRecipe';
 
 export default function AllRoutes() {
   const location = useLocation();
@@ -22,6 +23,7 @@ export default function AllRoutes() {
         <Route path='/settings' element={<Settings />} />
         <Route path='/ingredients' element={<Ingredients />} />
         <Route path='/ingredient/create' element={<CreateIngredient />}></Route>
+        <Route path='/recipe/create' element={<CreateRecipe />}></Route>
       </Routes>
     </div>
   );
