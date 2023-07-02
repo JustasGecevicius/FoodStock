@@ -6,6 +6,7 @@ import {
 } from '../ingredients/api';
 import Navigation from '../../components/navigation/Navigation';
 import Select, { MultiValue } from 'react-select';
+import { Link } from 'react-router-dom';
 
 export default function CreateRecipe() {
   const [name, setName] = useState('');
@@ -42,7 +43,11 @@ export default function CreateRecipe() {
   const toggleEditSteps = (index: number) => {
     setSteps((steps) => {
       const stepsCopy = [...steps];
-      stepsCopy[index] = { ...steps[index], edit: !steps[index].edit };
+      stepsCopy[index] = {
+        ...steps[index],
+        edit: !steps[index].edit,
+        value: steps[index].value === 'New Step' ? '' : steps[index].value,
+      };
       return stepsCopy;
     });
   };
@@ -83,7 +88,7 @@ export default function CreateRecipe() {
           </label>
           <label
             htmlFor='ingredients'
-            className='flex flex-col items-center text-center text-teal-900'>
+            className='flex flex-col items-center text-center text-teal-900 w-52'>
             Add Ingredients
             {ingredients && (
               <Select
@@ -93,6 +98,13 @@ export default function CreateRecipe() {
                 onChange={handleChangeIngredients}
                 isSearchable={true}
                 isMulti
+                styles={{
+                  control: (baseStyles, state) => ({
+                    ...baseStyles,
+                    // maxWidth: '208px',
+                    minWidth: '208px',
+                  }),
+                }}
               />
             )}
           </label>
@@ -108,57 +120,63 @@ export default function CreateRecipe() {
               value={calories ? calories : undefined}
             />
           </label> */}
-          <div>
-            {steps.length > 0 &&
-              steps.map((step, index) =>
-                step.edit === true ? (
-                  <li key={index}>
-                    <input
-                      type='text'
-                      placeholder='step'
-                      value={step.value}
-                      onChange={(e) =>
-                        setSteps((steps) => {
-                          const stepsCopy = [...steps];
-                          stepsCopy.splice(index, 1, {
-                            edit: steps[index].edit,
-                            value: e.target.value,
+          <div className='flex flex-col items-center w-52'>
+            <ol className='w-full list-decimal'>
+              {steps.length > 0 &&
+                steps.map((step, index) =>
+                  step.edit === true ? (
+                    <li
+                      key={index}
+                      className='flex flex-row w-full mt-2 gap-x-2'>
+                      <input
+                        type='text'
+                        placeholder='Describe Step'
+                        value={step.value}
+                        onChange={(e) =>
+                          setSteps((steps) => {
+                            const stepsCopy = [...steps];
+                            stepsCopy.splice(index, 1, {
+                              edit: steps[index].edit,
+                              value: e.target.value,
+                            });
+                            return stepsCopy;
+                          })
+                        }
+                        onBlur={() => toggleEditSteps(index)}
+                        className='w-full px-2 text-white rounded-md grow basis-0'
+                      />
+                      <button
+                        onClick={() => {
+                          setSteps((steps) => {
+                            const stepsCopy = [...steps];
+                            stepsCopy.splice(index, 1);
+                            return stepsCopy;
                           });
-                          return stepsCopy;
-                        })
-                      }
-                      onBlur={() => toggleEditSteps(index)}
-                      className='text-teal-900'
-                    />
-                    <button
-                      onClick={() => {
-                        setSteps((steps) => {
-                          const stepsCopy = [...steps];
-                          stepsCopy.splice(index, 1);
-                          return stepsCopy;
-                        });
-                      }}>
-                      Del
-                    </button>
-                  </li>
-                ) : (
-                  <li
-                    onClick={() => toggleEditSteps(index)}
-                    tabIndex={0}
-                    key={index}
-                    className='text-teal-900'>
-                    {step.value}
-                  </li>
-                )
-              )}
+                        }}
+                        className='px-3 py-1 text-white bg-teal-900 rounded-md'>
+                        Del
+                      </button>
+                    </li>
+                  ) : (
+                    <li
+                      onClick={() => toggleEditSteps(index)}
+                      tabIndex={0}
+                      key={index}
+                      className='mt-2 text-teal-900'>
+                      {step.value}
+                    </li>
+                  )
+                )}
+            </ol>
             <button
               onClick={() =>
                 setSteps((steps) => {
                   const stepsCopy = [...steps];
-                  stepsCopy.push({ edit: false, value: 'new step' });
+                  stepsCopy.push({ edit: false, value: 'New Step' });
                   return stepsCopy;
                 })
-              }>
+              }
+              className='px-3 py-1 mt-4 text-white bg-teal-900 rounded-md shadow w-28'>
               Add Step
             </button>
           </div>
@@ -181,7 +199,7 @@ export default function CreateRecipe() {
                   id='comments'
                   cols={5}
                   rows={5}
-                  className='w-screen'
+                  className='w-full p-1 rounded-md'
                   onChange={(e) => setComments(e.target.value)}
                 />
               </div>
@@ -201,9 +219,11 @@ export default function CreateRecipe() {
             }}>
             Save
           </button>
-          <button className='w-20 p-0 text-teal-900 bg-transparent focus:border-transparent active:border-transparent focus:bg-transparent active:bg-transparent focus:ring-transparent active:ring-transparent'>
-            Cancel
-          </button>
+          <Link to='/recipes'>
+            <button className='w-20 p-0 text-teal-900 bg-transparent focus:border-transparent active:border-transparent focus:bg-transparent active:bg-transparent focus:ring-transparent active:ring-transparent'>
+              Cancel
+            </button>
+          </Link>
         </div>
       </div>
       <Navigation />

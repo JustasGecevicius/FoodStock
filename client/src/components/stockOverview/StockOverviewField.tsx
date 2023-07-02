@@ -9,6 +9,14 @@ export default function StockOverviewField() {
         <StockItem />
         <StockItem />
         <StockItem />
+        <StockItem />
+        <StockItem />
+        <StockItem />
+        <StockItem />
+        <StockItem />
+        <StockItem />
+        <StockItem />
+        <StockItem />
       </div>
       <button className='w-20 p-0 text-teal-900 bg-transparent focus:border-transparent active:border-transparent focus:bg-transparent active:bg-transparent focus:ring-transparent active:ring-transparent'>
         More

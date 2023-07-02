@@ -2,29 +2,29 @@ import { useEffect, useState } from 'react';
 import Navigation from '../../components/navigation/Navigation';
 import MacroInput from '../../components/ingredients/MacroInput';
 import { useCreateIngredientMutation } from './api';
+import { Link } from 'react-router-dom';
 
 export interface MacrosType {
-  protein: null | number;
-  carbs: null | number;
-  fat: null | number;
+  protein: number;
+  carbs: number;
+  fat: number;
 }
 
 export default function CreateIngredient() {
   const [name, setName] = useState('');
   const [calories, setCalories] = useState<number | null>(null);
   const [macros, setMacros] = useState<MacrosType>({
-    protein: null,
-    carbs: null,
-    fat: null,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
   });
   const [isMacrosOpen, setIsMacrosOpen] = useState(false);
   const [image, setImage] = useState<File | null>(null);
 
   const [createIngredient, { isLoading }] = useCreateIngredientMutation();
-  console.log(isLoading);
+
   const handleSave = async () => {
     const formData = new FormData();
-    console.log(name, calories, macros, image);
     formData.append('name', name);
     formData.append('calories', JSON.stringify(calories));
     formData.append('macros', JSON.stringify(macros));
@@ -94,20 +94,35 @@ export default function CreateIngredient() {
                 <MacroInput
                   macros={macros.protein}
                   onChange={(value: number) =>
-                    setMacros((prevState) => ({ ...prevState, protein: value }))
+                    setMacros((prevState) => {
+                      console.log(value, 'changedValue');
+                      return {
+                        ...prevState,
+                        protein: value,
+                      };
+                    })
                   }
+                  label='Protein'
                 />
                 <MacroInput
                   macros={macros.carbs}
                   onChange={(value: number) =>
-                    setMacros((prevState) => ({ ...prevState, carbs: value }))
+                    setMacros((prevState) => ({
+                      ...prevState,
+                      carbs: value < 0 ? 0 : value,
+                    }))
                   }
+                  label='Carbs'
                 />
                 <MacroInput
                   macros={macros.fat}
                   onChange={(value: number) =>
-                    setMacros((prevState) => ({ ...prevState, fat: value }))
+                    setMacros((prevState) => ({
+                      ...prevState,
+                      fat: value < 0 ? 0 : value,
+                    }))
                   }
+                  label='Fat'
                 />
               </div>
               <button
@@ -126,9 +141,11 @@ export default function CreateIngredient() {
             }}>
             Save
           </button>
-          <button className='w-20 p-0 text-teal-900 bg-transparent focus:border-transparent active:border-transparent focus:bg-transparent active:bg-transparent focus:ring-transparent active:ring-transparent'>
-            Cancel
-          </button>
+          <Link to='/recipes'>
+            <button className='w-20 p-0 text-teal-900 bg-transparent focus:border-transparent active:border-transparent focus:bg-transparent active:bg-transparent focus:ring-transparent active:ring-transparent'>
+              Cancel
+            </button>
+          </Link>
         </div>
       </div>
       <Navigation />
