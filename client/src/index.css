@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .flex-col {
+    display: flex;
+    flex-direction: column;
+  }
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+  }
+  .screen {
+    width: 100dvw;
+    height: 100dvh;
+  }
+  .background {
+    background-image: url('/src/assets/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .zero {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}
+
 .backgroundImage {
   background-image: url('/src/assets/background.jpg');
 }

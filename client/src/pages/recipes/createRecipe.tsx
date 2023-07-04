@@ -93,7 +93,7 @@ export default function CreateRecipe() {
             {ingredients && (
               <Select
                 options={ingredients}
-                placeholder='SelectIngredients'
+                placeholder='Select Ingredients'
                 value={selectedIngredients}
                 onChange={handleChangeIngredients}
                 isSearchable={true}
